@@ -35,7 +35,10 @@ static uint_fast8_t ads1118_event(struct timer *timer);
 static void ads1118_transfer(struct ads1118_spi *spi)
 {
     uint8_t current_sensor = spi->current_sensor;
-    uint8_t next_sensor = (current_sensor + 1) % spi->sensor_count;
+    uint8_t next_sensor = current_sensor + 1;
+    if (next_sensor >= spi->sensor_count) {
+        next_sensor = 0;
+    }
 
     uint8_t msg[4] = {0x00, 0x00, 0x00, 0x00};
     msg[1] |= 0b1 << 3;
