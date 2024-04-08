@@ -8,7 +8,7 @@
 #include "command.h" // DECL_COMMAND
 #include "sched.h" // DECL_TASK
 #include "spicmds.h" // spidev_transfer
-#include "generic/misc.h"
+#include "board/misc.h"
 
 struct ads1118_sensor_config {
     unsigned adc : 1;
