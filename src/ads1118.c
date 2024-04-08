@@ -34,32 +34,7 @@ static uint_fast8_t ads1118_event(struct timer *timer);
 
 static void ads1118_transfer(struct ads1118_spi *spi)
 {
-    uint8_t current_sensor = spi->current_sensor;
-    uint8_t next_sensor = (current_sensor + 1) % spi->sensor_count;
-
-    uint8_t msg[4] = {0x00, 0x00, 0x00, 0x00};
-    msg[1] |= 0b1 << 3;
-    msg[1] |= 0b01 << 1;
-    msg[1] |= 1;
-    if(spi->sensor_configs[next_sensor].adc == 0) {
-    // 0 - ADC / 1 - Temperature
-        msg[1] |= 0b1 << 4;
-    } else {
-        //mux setting
-        msg[0] |= (spi->sensor_configs[next_sensor].mux & 0b111) << 4;
-        //pga
-        msg[0] |= (spi->sensor_configs[next_sensor].pga & 0b111) << 1;
-    }
-    msg[1] |= spi->sensor_configs[next_sensor].dr << 5;
-    msg[2] = msg[0];
-    msg[3] = msg[1];
-    spidev_transfer(spi->spi, 1, 4, msg);
-    if(spi->sensor_configs[current_sensor].adc == 0)
-        spi->last_temperature = msg[0] << 8 | msg[1];
-    sendf("ads1118_result oid=%u temperature=%c sensor=%c value=%c",
-          spi->oid, spi->last_temperature, current_sensor,
-          (msg[0] << 8) | msg[1]);
-    spi->current_sensor = next_sensor;
+    /* testing */
 }
 
 void command_config_ads1118(uint32_t *args)
